@@ -1,51 +1,17 @@
+package PilaP;
+
 import javax.swing.JOptionPane;
 
-public class estrucLineales {
-
-    public static void main(String[] args) {
-        JOptionPane.showMessageDialog(null, "Bienvenidos al menú de estructuras lineales", "Bienvenida", JOptionPane.INFORMATION_MESSAGE);
-
-        int respuesta1 = JOptionPane.showConfirmDialog(null, "¿Desea continuar?", "Confirmar", JOptionPane.YES_NO_OPTION);
-
-        if (respuesta1 == JOptionPane.YES_OPTION) {
-            mostrarMenuPrincipal();
-        }
-
-        JOptionPane.showMessageDialog(null, "Programa finalizado!");
-    }
-
-    private static void mostrarMenuPrincipal() {
-        boolean salir = false;
-
-        while (!salir) {
-            String[] opcionesMenu1 = {"Pila", "Cola", "Salir"};
-            String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione una de estas opciones para ingresar al menú",
-                    "Menú principal de estructuras lineales",
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    opcionesMenu1,
-                    opcionesMenu1[0]
-            );
-
-            if (seleccion == null || seleccion.equals("Salir")) {
-                salir = true;
-            } else {
-                switch (seleccion) {
-                    case "Pila" -> manejarPila();
-                    case "Cola" -> JOptionPane.showMessageDialog(null, "Funcionalidad de Cola no implementada aún.");
-                }
-            }
-        }
-    }
-
-    private static void manejarPila() {
+public class SistemaPila{
+    
+    public static void manejarPila() {
         boolean continuar1 = true;
         int[] vector = null; // Vector inicialmente no creado
         int index = 0; // Posición
         boolean pilaCreada = false; // Verifica si la pila fue creada
 
         while (continuar1) {
-            String[] opcionesMenu2 = {"Insertar", "Eliminar", "Está vacía", "Crear", "Volver"};
+            String[] opcionesMenu2 = {"Insertar", "Eliminar", "Está vacía", "Crear", "Volver", "Mostrar"};
             String seleccion2 = (String) JOptionPane.showInputDialog(
                     null,
                     "Seleccione una de estas opciones para este menú",
@@ -62,23 +28,29 @@ public class estrucLineales {
             }
 
             switch (seleccion2) {
-                case "Crear" -> pilaCreada = crearPila(vector, pilaCreada);
-                case "Insertar" -> index = insertarEnPila(vector, index, pilaCreada);
-                case "Eliminar" -> index = eliminarDePila(index, pilaCreada);
-                case "Está vacía" -> verificarPilaVacia(index, pilaCreada);
+                case "Crear" -> {
+                    if (!pilaCreada) {
+                        vector = crearPila();
+                        pilaCreada = true;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "La pila ya ha sido creada.");
+                    }
+                }
+                case "Insertar" ->
+                    index = insertarEnPila(vector, index, pilaCreada);
+                case "Eliminar" ->
+                    index = eliminarDePila(index, pilaCreada);
+                case "Está vacía" ->
+                    verificarPilaVacia(index, pilaCreada);
+                case "Mostrar" ->
+                    mostrarResultado(pilaCreada, index, vector);
             }
         }
     }
 
-    private static boolean crearPila(int[] vector, boolean pilaCreada) {
-        if (!pilaCreada) {
-            vector = new int[5]; // Crear el vector
-            JOptionPane.showMessageDialog(null, "Pila creada con éxito!");
-            return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "La pila ya ha sido creada.");
-            return pilaCreada;
-        }
+    private static int[] crearPila() {
+        JOptionPane.showMessageDialog(null, "Pila creada con éxito!");
+        return new int[5];
     }
 
     private static int insertarEnPila(int[] vector, int index, boolean pilaCreada) {
@@ -129,6 +101,18 @@ public class estrucLineales {
             } else {
                 JOptionPane.showMessageDialog(null, "La pila no está vacía.");
             }
+        }
+    }
+
+    private static void mostrarResultado(boolean pilaCreada, int index, int[] vector) {
+        if (!pilaCreada) {
+            JOptionPane.showMessageDialog(null, "Debe crear una pila antes de eliminar elementos.");
+        } else {
+            StringBuilder resultado = new StringBuilder("Elementos en la pila son:\n");
+            for (int i = index - 1; i >= 0; i--) {
+                resultado.append(vector[i]).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, resultado.toString(), "Contenido dentro de la pila", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
